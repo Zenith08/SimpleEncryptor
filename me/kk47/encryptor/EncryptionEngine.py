@@ -2,24 +2,24 @@ import string #gets us access to letters
 import random
 '''
 Created on May 22, 2019
-
-@author: kaiden
+@author: Kaiden Richardson
 '''
+#As a fun fact there are 100! possible encryption maps that can be generated. Thats
+#9.3326215443944152681699238856267*10^157‬ combinations.
 #this is supposed to have functions to encrypt and decrypt the text input
-#Generate an encryption map of one ascii character to another ascii character.
+#Generate an encryption map of one character to another character.
 #The random seed is equivilant to the key which will be used.
 def generateMapping(seed):
     random.seed(seed) #Seed our random
     randMap = {} #Create our output map.
-    #Generates a series of nonrepeating random numbers which are all going to be valid ascii chars
-    randoms = random.sample(range(len(string.ascii_letters)), len(string.ascii_letters))
+    #Generates a series of nonrepeating random numbers which are all going to be valid chars
+    randoms = random.sample(range(len(string.printable)), len(string.printable))
     
     index = 0 #Index in the random value array.
     
-    for let in string.ascii_letters: #This now creates the map using the original characters and then the mapped random ones.
-        randMap.setdefault(let, string.ascii_letters[randoms[index]])
+    for let in string.printable: #This now creates the map using the original characters and then the mapped random ones.
+        randMap.setdefault(let, string.printable[randoms[index]])
         index+=1
-    
     #Return the map so it can be used.
     return randMap
 
@@ -28,12 +28,12 @@ def generateMapping(seed):
 def decryptMapping(seed):
     random.seed(seed)
     randMap = {}
-    randoms = random.sample(range(len(string.ascii_letters)), len(string.ascii_letters))
+    randoms = random.sample(range(len(string.printable)), len(string.printable))
     
     index = 0
     
-    for let in string.ascii_letters:
-        randMap.setdefault(string.ascii_letters[randoms[index]], let)
+    for let in string.printable:
+        randMap.setdefault(string.printable[randoms[index]], let)
         index+=1
     
     return randMap

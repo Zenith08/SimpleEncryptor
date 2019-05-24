@@ -1,7 +1,7 @@
 import EncryptionEngine as encryp #@UnresolvedImport
 '''
 Created on May 22, 2019
-
+@author Kaiden Richardson
 '''
 
 #Functions for execution stuff
@@ -80,6 +80,11 @@ def hackText(encrypted, known):
     print("Finished check and found nothing.")
 #Executable part -----------------------------------------------------------
 print("Welcome to the encryption service.")
+
+#print(string.ascii_letters)
+#print(string.printable)
+#print(string.digits)
+#print(string.punctuation)
 
 choice = "" #What the user wants to do.
 
