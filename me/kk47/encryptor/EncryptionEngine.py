@@ -3,7 +3,7 @@ import random
 '''
 Created on May 22, 2019
 
-@author: kaide
+@author: kaiden
 '''
 #this is supposed to have functions to encrypt and decrypt the text input
 #Generate an encryption map of one ascii character to another ascii character.

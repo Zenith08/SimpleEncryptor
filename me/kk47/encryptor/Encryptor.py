@@ -1,53 +1,82 @@
 import EncryptionEngine as encryp #@UnresolvedImport
-import sys
 '''
 Created on May 22, 2019
 
-@author: kaide
 '''
 
 #Functions for execution stuff
 #Encrypts a file from src and saves the new copy to dest using the provided seed
 def encryptFile(src, dest, seed):
     #Open both files. If this fails then quit now.
-    with open(src, 'r') as source:
-        with open(dest, 'w') as destination:
-            #Tell the user what's happening
-            print("Beginning encode of", src, "to", dest)
-            encmap = encryp.generateMapping(seed) #saving the map now saves on performance later.
-            
-            for line in source: #Loop through the file and encrypt the file using the provided string.
-                destination.write(encryp.mapString(line, encmap))
+    try:
+        source = open(src, 'r')
+        destination = open(dest, 'w')
+        #Tell the user what's happening
+        print("Beginning encode of", src, "to", dest)
+        encmap = encryp.generateMapping(seed) #saving the map now saves on performance later.
+        
+        for line in source: #Loop through the file and encrypt the file using the provided string.
+            destination.write(encryp.mapString(line, encmap))
                 
-            destination.close()
+        destination.close()
         source.close()
-    print("Completed encoding.")
+    except FileNotFoundError:
+        print("One of the requested files did not exist. Operation not completed.")
+    except Exception: #Don't think this will happen but it saves other issues.
+        print("An error occurred internally. Please check your arguments.")
+    else:
+        print("Completed encoding successfully.")
 
 #Decrypts a file from src and saves it to dest using the provided seed.
 #Basically like the encryptFile but uses the decryption map.
 def decryptFile(src, dest, seed):
-    with open(src, 'r') as source:
-        with open(dest, 'w') as destination:
-            print("Beginning decoding of", src, "to", dest)
-            encmap = encryp.decryptMapping(seed)
+    try:
+        source = open(src, 'r')
+        destination = open(dest, 'w')
+        print("Beginning decoding of", src, "to", dest)
+        encmap = encryp.decryptMapping(seed)
             
-            for line in source:
-                destination.write(encryp.mapString(line, encmap))
+        for line in source:
+            destination.write(encryp.mapString(line, encmap))
                 
-            destination.close()
+        destination.close()
         source.close()
-    print("Completed decoding.")
+    except FileNotFoundError:
+        print("One of the requested files did not exist. Operation not completed.")
+    except Exception: #Don't think this should be able to happen but at least we won't crash.
+        print("An error occurred internally. Please check your arguments.")
+    else:
+        print("Completed decoding successfully.")
 
 #Max int from python 2 9223372036854775807
+#How much to go each check round.
+increment = 10000
 #The idea is this will figure out what seed was used given a known word and encrypted text put in.
 def hackText(encrypted, known):
-    for i in range(1000): #Loop through each possible key. Starting at 1
-        result = encryp.decryptText(encrypted, str(i))
-        if known in result: #If the known word is in the decrypted string
-            print("The used seed was", i) #Tell the user and end the check.
-            print("The text read:", result)
-            return result
-
+    start = 0
+    end = 0+increment
+    attempt = True
+    
+    while attempt:
+        print(f'Trying keys {start} to {end}.')
+        for i in range(start, end): #Loop through each possible key. Starting at 1
+            result = encryp.decryptText(encrypted, str(i))
+            if known in result: #If the known word is in the decrypted string
+                print("The used seed was", i) #Tell the user and end the check.
+                print("The text read:", result)
+                return result
+        ans = input(f'Finished checks from {start}, {end}. Continue on? (Y/N)\n')
+        if ans.upper() == "Y":
+            print("Okay, continuing.")
+            start+=increment
+            end+=increment
+        elif ans.upper() == "N":
+            attempt = False
+            print("Ending check.")
+        else:
+            print("That is not a valid answer. Ending check.")
+            attempt = False
+        
     print("Finished check and found nothing.")
 #Executable part -----------------------------------------------------------
 print("Welcome to the encryption service.")
