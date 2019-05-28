@@ -17,7 +17,7 @@ def encryptFile(src, dest, seed):
         
         for line in source: #Loop through the file and encrypt the file using the provided string.
             destination.write(encryp.mapString(line, encmap))
-                
+            
         destination.close()
         source.close()
     except FileNotFoundError:
@@ -48,7 +48,7 @@ def decryptFile(src, dest, seed):
     else:
         print("Completed decoding successfully.")
 
-#Max int from python 2 9223372036854775807
+#Max int from python 2: 9223372036854775807
 #How much to go each check round.
 increment = 10000
 #The idea is this will figure out what seed was used given a known word and encrypted text put in.
